@@ -34,7 +34,6 @@ jobs:
           ruby-version: 2.7.3
       - name: Install Dependencies
         run:
-          sudo apt update
           sudo apt-get install -yqq libpq-dev
           gem install bundler
 
