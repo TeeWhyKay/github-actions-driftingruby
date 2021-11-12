@@ -17,13 +17,23 @@ on:
 jobs:
   # This workflow contains a single job called "test"
   test:
-    services:
-      db:
-        image: postgres:11 # referencing a docker image
-        ports: ['5432:5432']
-
     # The type of runner that the job will run on (run in a docker ubuntu container)
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports: ['5432:5432']
+
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,9 +42,11 @@ jobs:
       - uses: ruby/setup-ruby@v1.85.0
         with:
           ruby-version: 2.7.3
+      - uses: Borales/actions-yarn@v2.3.0
+        with:
+          cmd: install
       - name: Install Dependencies
         run:
-          sudo apt-get install -y libpq-dev
           gem install bundler
 
       - name: Install Gems
