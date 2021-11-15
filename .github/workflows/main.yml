@@ -55,7 +55,7 @@ jobs:
 
       - name: Prepare Database
         run:
-          bundle exec rails db:setup
+          bundle exec rails db:prepare
 
       - name: Run Tests
         env:
